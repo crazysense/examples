@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="examples.neo4j.dao.UserMapper">
+	<resultMap type="examples.neo4j.domain.User" id="userMap">
+		<id property="id" column="id" javaType="java.lang.Long" />
+		<result property="name" column="name" javaType="java.lang.String" />
+		<result property="gender" column="gender" javaType="java.lang.String" typeHandler="examples.neo4j.typehandler.GenderTypeHandler" />
+	</resultMap>
+	
+	<select id="getUsers" resultMap="userMap">
+		MATCH (n:User)
+		<if test="name != null">
+		WHERE n.name = '${name}'
+		</if>
+		RETURN n.id AS id, n.name AS name, n.gender AS gender
+	</select>
+</mapper>
